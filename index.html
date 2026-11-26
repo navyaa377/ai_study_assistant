@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Study Assistant</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#notes-input">Skip to notes</a>
+
+  <header class="site-header">
+    <h1>AI Study Assistant</h1>
+    <button id="toggle-theme" type="button" aria-pressed="false">Dark mode</button>
+  </header>
+
+  <main>
+    <!-- Global status / error messages (announced to screen readers) -->
+    <div id="status" class="status" role="status" aria-live="polite" hidden></div>
+
+    <section class="card" aria-labelledby="settings-h">
+      <h2 id="settings-h">Settings</h2>
+      <label for="apiKey">Your API key (Gemini, Groq or xAI Grok)</label>
+      <div class="row">
+        <input type="password" id="apiKey" autocomplete="off" placeholder="Paste your key, e.g. AIza..., gsk_..., xai-..." />
+        <button id="show-key" type="button" class="secondary" aria-pressed="false">Show</button>
+        <button id="saveApiKey" type="button">Save key</button>
+      </div>
+      <label for="model">Model</label>
+      <select id="model" disabled>
+        <option value="">Enter a valid key first</option>
+      </select>
+      <p id="model-note" class="hint" aria-live="polite"></p>
+      <p id="provider-info" class="hint">No key entered. The provider is detected automatically from your key. Stored only in this browser.</p>
+    </section>
+
+    <section class="card" aria-labelledby="input-h">
+      <h2 id="input-h">Your notes</h2>
+      <label for="notes-input">Paste class notes or type a topic</label>
+      <textarea id="notes-input" rows="8" placeholder="Paste your class notes or type a topic"></textarea>
+      <div id="char-count" class="hint">0 / 8000 characters</div>
+
+      <div class="grid">
+        <div>
+          <label for="style">Answer style</label>
+          <select id="style">
+            <option value="standard">Standard</option>
+            <option value="eli10">Explain like I am 10</option>
+            <option value="exam">Exam-focused</option>
+            <option value="detailed">Detailed</option>
+          </select>
+        </div>
+        <div>
+          <label for="difficulty">Quiz difficulty</label>
+          <select id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <button id="generate" type="button" disabled>Generate study material</button>
+        <button id="regenerate" type="button" class="secondary" disabled>Regenerate</button>
+      </div>
+    </section>
+
+    <section id="loading" class="loading" role="status" hidden>
+      <span class="spinner" aria-hidden="true"></span>
+      <span>The AI is working... please wait.</span>
+    </section>
+
+    <section id="outputs" class="card" aria-labelledby="outputs-h" hidden>
+      <h2 id="outputs-h">Study material</h2>
+      <div class="tabs" role="tablist" aria-label="Study material">
+        <button role="tab" id="tab-summary" aria-controls="summary-panel" aria-selected="true" data-tab="summary">Summary</button>
+        <button role="tab" id="tab-quiz" aria-controls="quiz-panel" aria-selected="false" tabindex="-1" data-tab="quiz">Quiz</button>
+        <button role="tab" id="tab-flashcards" aria-controls="flashcards-panel" aria-selected="false" tabindex="-1" data-tab="flashcards">Flashcards</button>
+      </div>
+
+      <div id="summary-panel" role="tabpanel" aria-labelledby="tab-summary" tabindex="0">
+        <div id="summary" class="output-box"></div>
+        <div class="row">
+          <button id="copy-summary" type="button" class="secondary">Copy summary</button>
+          <button id="download-summary" type="button" class="secondary">Download summary</button>
+          <button id="speak-summary" type="button" class="secondary" aria-pressed="false">Read aloud</button>
+        </div>
+      </div>
+
+      <div id="quiz-panel" role="tabpanel" aria-labelledby="tab-quiz" tabindex="0" hidden>
+        <div id="quiz"></div>
+      </div>
+
+      <div id="flashcards-panel" role="tabpanel" aria-labelledby="tab-flashcards" tabindex="0" hidden>
+        <p id="known-count" class="hint" aria-live="polite"></p>
+        <div id="flashcards" class="cards"></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="progress-h">
+      <h2 id="progress-h">Quiz progress</h2>
+      <p id="progress" class="hint">No quizzes taken yet.</p>
+    </section>
+
+    <section class="card" aria-labelledby="history-h">
+      <h2 id="history-h">History</h2>
+      <label for="history-search">Search history</label>
+      <input type="search" id="history-search" placeholder="Filter by topic or text" />
+      <ul id="history-list" class="history-list"></ul>
+      <p id="history-empty" class="hint">No saved generations yet.</p>
+      <button id="clear-history" type="button" class="danger">Clear history</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
